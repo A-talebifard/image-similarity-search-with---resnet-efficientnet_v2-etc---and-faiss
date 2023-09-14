@@ -35,7 +35,7 @@ print(len(image_datasets))
 
 
 # fetch pretrained model
-model = torch.hub.load('pytorch/vision:v0.10.0', 'resnet18', pretrained=True)
+model = torch.hub.load('pytorch/vision', 'resnet18', pretrained=True)
 
 
 # Select the desired layer
