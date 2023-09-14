@@ -1,12 +1,10 @@
-from torchvision import datasets, transforms
-import torch
 import numpy as np
-import matplotlib.pyplot as plt
-from tqdm.auto import tqdm
-from PIL import Image
+import torch
+from torchvision import datasets, transforms
 import faiss                  
 
 
+#GNERATING IMAGE EMBEDDINGS
 
 # create dataloader with required transforms
 tc = transforms.Compose([
@@ -19,24 +17,18 @@ dloader = torch.utils.data.DataLoader(image_datasets, batch_size=10, shuffle=Fal
 
 print(len(image_datasets))
 
+
+#for runnig in console (in debug mode)
 #file = open('items4.txt','w')
 # for i in range(len(image_datasets.samples)):
 # 	file.write(str(i) + "\n" + str(image_datasets.samples[i]) + "\n")
 #file.close()
 
 
-#for img, label in dloader:
-      #print(np.transpose(img[0], (1,2,0)).shape)
-      #print(img[0])
-      #plt.imshow((img[0].detach().numpy().transpose(1, 2, 0)*255).astype(np.uint8))
-      #plt.show()
-      #i = i + 1
-      #break
-
 
 # fetch pretrained model
-model = torch.hub.load('pytorch/vision', 'resnet18', pretrained=True)
-
+model = torch.hub.load('pytorch/vision', 'efficientnet_v2_s', pretrained=True)
+                            #resnet152  efficientnet_b7  efficientnet_v2_l  ...
 
 # Select the desired layer
 layer = model._modules.get('avgpool')
@@ -62,7 +54,6 @@ for X, y in dloader:
 print(len(outputs))
 
 
-
 # flatten list of embeddings to remove batches
 list_embeddings = [item for sublist in outputs for item in sublist]
 
@@ -71,25 +62,10 @@ print(np.array(list_embeddings[0]).shape) #returns (512,)
 
 
 
-# Iterate through the images and their corresponding embeddings,
-#and append them to hub dataset
-#for i in tqdm(range(len(image_datasets))):
-    #img = image_datasets[i][0].detach().numpy().transpose(1, 2, 0)
-    #img = img * 255 # images are normalized
-    #img = img.astype(np.uint8)
 
-    #print("Image:")
-    #print(img.shape)
-    #plt.imshow(img)
-    #plt.show()
-    #print(list_embeddings[0:10])  # show only 10 first values of the image embedding
+#PERFORMING SIMILARITY SEARCH ON GENERATED IMAGE EMVBEDDINGS
 
-
-
-
-
-
-index = faiss.IndexFlatL2(512)  # build the index, d=size of vectors
+index = faiss.IndexFlatL2(1280)  # build the index, d=size of vectors. size of vectors depends on the architecture that you are using, e.g. resnet18, resnet152, efficientnet_b0 and etc.
 #index = faiss.IndexFlatL2(256)
 
 # here we assume arr contains a n-by-d numpy matrix of type float32
