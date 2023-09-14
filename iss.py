@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from tqdm.auto import tqdm
 from PIL import Image
+import faiss                  
 
 
 
@@ -88,8 +89,6 @@ print(np.array(list_embeddings[0]).shape) #returns (512,)
 
 
 
-import faiss                   # make faiss available
-
 index = faiss.IndexFlatL2(512)  # build the index, d=size of vectors
 #index = faiss.IndexFlatL2(256)
 
@@ -106,14 +105,3 @@ query = np.expand_dims(arr, axis=1)
 k = 4                          # we want 4 similar vectors
 D, I = index.search(query[55], k)     # actual search      55 is just an example
 print(I)
-
-
-
-
-
-
-
-
-
-
-
