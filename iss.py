@@ -18,7 +18,10 @@ dloader = torch.utils.data.DataLoader(image_datasets, batch_size=10, shuffle=Fal
 print(len(image_datasets))
 
 
+
+#storing image addresses in a text file by the order that they are stored in image_datasets
 #for runnig in console (in debug mode)
+
 #file = open('items4.txt','w')
 # for i in range(len(image_datasets.samples)):
 # 	file.write(str(i) + "\n" + str(image_datasets.samples[i]) + "\n")
